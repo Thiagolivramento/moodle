@@ -330,6 +330,46 @@ class helper {
                 'string' => new \lang_string('restorecourse', 'admin')
             );
         }
+        //recyclebyn
+        
+        if (!\tool_recyclebin\category_bin::is_enabled()) {
+            $actions['recyclebin'] = array (
+                'url' =>  new moodle_url('/admin/tool/recyclebin/index.php', array( 'contextid' => $context->id )),
+                'icon' => new pix_icon('trash', $pluginname, 'tool_recyclebin'),
+                'string' => new \lang_string(
+
+            $categorybin = new \tool_recyclebin\category_bin($context->instanceid);     
+        
+        }
+
+        // Check we can view the recycle bin.
+        if (!$categorybin->can_view()) {
+            return null;
+        }
+        $url = null;
+        $settingnode = null;
+
+        // Add a link to the category recyclebin.
+        $url =
+        // If we are set to auto-hide, check the number of items.
+        $autohide = get_config('tool_recyclebin', 'autohide');
+        if ($autohide) {
+            $items = $categorybin->get_items();
+            if (empty($items)) {
+                 return null;
+            }
+        }
+        // Add the recyclebin link.
+        $pluginname = get_string('pluginname', 'tool_recyclebin');
+       
+        $node = navigation_node::create(
+           $pluginname,
+           $url,
+           navigation_node::NODETYPE_LEAF,
+           'tool_recyclebin',
+           'tool_recyclebin',
+           new pix_icon('trash', $pluginname, 'tool_recyclebin')
+        );
 
         return $actions;
     }
@@ -389,7 +429,7 @@ class helper {
                 'attributes' => array('data-action' => 'movedown', 'class' => 'action-movedown')
             );
         }
-        return $actions;
+               return $actions;
     }
 
     /**
@@ -456,6 +496,8 @@ class helper {
                 'string' => \get_string('restore')
             );
         }
+   
+
         return $actions;
     }
 

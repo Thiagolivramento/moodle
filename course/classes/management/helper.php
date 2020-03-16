@@ -332,25 +332,19 @@ class helper {
         }
         //recyclebyn
         
-        if (!\tool_recyclebin\category_bin::is_enabled()) {
-            $actions['recyclebin'] = array (
+        if (!\tool_recyclebin\category_bin::is_enabled() && !$categorybin->can_view()) {
+           $pluginname = get_string('pluginname', 'tool_recyclebin');
+           $actions['recyclebin'] = array (
                 'url' =>  new moodle_url('/admin/tool/recyclebin/index.php', array( 'contextid' => $context->id )),
                 'icon' => new pix_icon('trash', $pluginname, 'tool_recyclebin'),
-                'string' => new \lang_string(
+                'string' => new \lang_string('pluginname', 'tool_recyclebin')
 
             $categorybin = new \tool_recyclebin\category_bin($context->instanceid);     
         
         }
-
-        // Check we can view the recycle bin.
-        if (!$categorybin->can_view()) {
-            return null;
-        }
-        $url = null;
-        $settingnode = null;
-
+  
         // Add a link to the category recyclebin.
-        $url =
+        $url = new moodle_url('/admin/tool/recyclebin/index.php', array( 'contextid' => $context->id ));        
         // If we are set to auto-hide, check the number of items.
         $autohide = get_config('tool_recyclebin', 'autohide');
         if ($autohide) {
@@ -359,19 +353,8 @@ class helper {
                  return null;
             }
         }
-        // Add the recyclebin link.
-        $pluginname = get_string('pluginname', 'tool_recyclebin');
-       
-        $node = navigation_node::create(
-           $pluginname,
-           $url,
-           navigation_node::NODETYPE_LEAF,
-           'tool_recyclebin',
-           'tool_recyclebin',
-           new pix_icon('trash', $pluginname, 'tool_recyclebin')
-        );
-
-        return $actions;
+                   
+         return $actions;
     }
 
     /**

@@ -82,7 +82,7 @@ Feature: Basic recycle bin functionality
     And "Student 1" "text" should exist in the "Group A" "table_row"
     And "Student 2" "text" should exist in the "Group A" "table_row"
     And "Student 2" "text" should exist in the "Group B" "table_row"
-
+    
   @javascript
   Scenario: Deleting a single item from the recycle bin
     Given I log in as "teacher1"
@@ -127,3 +127,12 @@ Feature: Basic recycle bin functionality
     And I press "Yes"
     And I should see "Recycle bin has been emptied"
     And I should see "There are no items in the recycle bin."
+
+  @javascript
+  Scenario: Show recycle bin on category action menu
+    Given I log in as "admin"
+    And I go to the courses management page
+    And I click on "Actions menu" "link"
+    And I should see "Recycle bin"
+    When I click on "Recycle bin" "link"
+    Then I should see "There are no items in the recycle bin."

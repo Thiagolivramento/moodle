@@ -331,6 +331,23 @@ class helper {
             );
         }
 
+        if (\tool_recyclebin\category_bin::is_enabled()) {
+            $categorybin = new \tool_recyclebin\category_bin($category->id);
+            if ($categorybin->can_view()) {
+                $autohide = get_config('tool_recyclebin', 'autohide');
+                $items = $categorybin->get_items();
+                if (!$autohide || !empty($categorybin->get_items())) {
+                    $pluginname = new \lang_string('pluginname', 'tool_recyclebin');
+                    $actions['recycle'] = array(
+                        'url' => new \moodle_url('/admin/tool/recyclebin/index.php', array('contextid' => $category->get_context()->id)),
+                        'icon' => new \pix_icon('trash', $pluginname, 'tool_recyclebin'),
+                        'string' => $pluginname
+                    );
+                }
+            }
+        }
+        
+
         return $actions;
     }
 

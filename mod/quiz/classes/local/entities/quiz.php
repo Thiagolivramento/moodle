@@ -91,4 +91,82 @@ require_once($CFG->dirroot . '/course/lib.php');
         return $this;
     }
 
+     /**
+     * Return list of all available columns
+     *
+     * These are all columns available to use in report that use this entity.
+     *
+     * @return column[]
+     */
 
+    protected function get_all_columns(): array {
+
+       $columns = [];
+
+       $quizalias = $this->get_table_alias('quiz');
+       $quizattemptsalias = $this->get_table_alias('quiz_attempts'); 
+
+       $join = $this->quizjoin();
+       $quizattemptsjoin = $this->quizattempsjoin();
+
+       //Quiz name column.
+       $columns[] = (new column(
+           'name',
+           new lang_string('name', 'mod_quiz'),
+           $this->get_entity_name()
+       ))
+           ->add_join($join)
+           ->set_is_sortable(true)
+           ->add_field("{$quizalias}.name");
+
+       //Quiz timeopen column.
+       $columns[] = (new column(
+           'timeopen',
+           new lang_string('timeopen', 'mod_quiz'),
+           $this->get_entity_name()
+       ))
+          ->add_join($join)
+          ->set_sortable(true)
+          ->add_field("{$quizalias}.timeopen");
+
+       //Handle quiz attempts columns.
+
+       //Attempts column.
+       $columns[] = (new column(
+           'state',
+           new lang_string('state', 'mod_quiz'),
+           $this->get_entity_name()
+       ))
+           ->add_join($quizattemptsjoin)
+           ->set_sortable(true)
+           ->add_field("{$quizattemptsalias}.state");
+
+      return $columns;
+    }
+       
+    /**
+     * Return list of all available filters
+     *
+     * @return filter[]
+     */
+    protected function get_all_filters(): array {
+
+       $filters = [];
+       $quizalias = $this->get_table_alias('quiz');
+       $quizattemptsalias = $this->get_table_alias('quiz_attempts'); 
+
+       $join = $this->quizjoin();
+       $quizattemptsjoin = $this->quizattempsjoin();
+
+       //Quiz name filter.
+       $filters[] = (new filter(
+           text::class,
+           'nameselector',
+           new lang_string('name', 'mod_quiz'),
+           $this->get_entity_name(),
+           "{$quizalias}.name"
+       ))
+           ->add_join($join);
+
+      $return $filters;
+    }

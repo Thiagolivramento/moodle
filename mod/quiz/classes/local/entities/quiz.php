@@ -168,5 +168,6 @@ require_once($CFG->dirroot . '/course/lib.php');
        ))
            ->add_join($join);
 
-      $return $filters;
+      return $filters;
     }
+ }

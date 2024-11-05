@@ -51,5 +51,5 @@ use core_reportbuilder\local\helpers\database;
 
          $quizentity = new \mod_quiz\local\entities\quiz();
          $quizalias = $quizentity->get_table_alias('quiz');
-
-
+     }
+ }

@@ -50,7 +50,9 @@ require_once($CFG->dirroot . '/course/lib.php');
       * @return string[]
       */
      protected function get_default_tables(): array {
-         return ['quiz'];
+         return ['quiz',
+                 'course_modules'];
+
      }
      
      /**
@@ -60,7 +62,7 @@ require_once($CFG->dirroot . '/course/lib.php');
       */
 
      protected function get_default_entity_title(): lang_string {
-         return new lang_string('quizreport', 'mod_quiz');
+         return new lang_string('quizinstancies', 'mod_quiz');
      }
 
      /**
@@ -98,6 +100,7 @@ require_once($CFG->dirroot . '/course/lib.php');
      */
 
     protected function get_all_columns(): array {
+       global $DB;
 
        $columns = [];
 
@@ -116,6 +119,25 @@ require_once($CFG->dirroot . '/course/lib.php');
           // ->add_join($join)
            ->set_is_sortable(true)
            ->add_field("{$quizalias}.name");
+
+       // Quiz name with link column.
+       $moduleid = $DB->get_field('modules', 'id', ['name' => 'quiz']);
+       $cmalias = $this->get_table_alias('course_modules');
+       $columns[] = (new column(
+          'namewithlink',
+          new lang_string('namewithlink', 'mod_quiz'),
+          $this->get_entity_name()
+       ))
+         ->add_join("JOIN {course_modules} {$cmalias} ON {$cmalias}.instance = {$quizalias}.id AND {$cmalias}.module = {$moduleid}")
+         ->set_type(column::TYPE_TEXT)
+         ->add_fields("{$quizalias}.name, {$quizalias}.id, {$cmalias}.id as cmid")
+         ->add_callback(static function(?string $name, \stdClass $quiz): string {
+             if (empty($quiz->id)) {
+                 return '';
+             }
+             $url = new \moodle_url('/mod/quiz/view.php', ['id' => $quiz->cmid]);
+             return \html_writer::link($url,format_string($quiz->name, true));
+         });         
 
        //Quiz timeopen column.
        $columns[] = (new column(
@@ -157,6 +179,7 @@ require_once($CFG->dirroot . '/course/lib.php');
        ))
            ->set_is_sortable(true)
            ->add_field("{$quizalias}.grade");
+
 
        //Handle quiz attempts columns.
 

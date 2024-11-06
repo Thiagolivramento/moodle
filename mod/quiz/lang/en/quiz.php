@@ -1054,6 +1054,7 @@ $string['theattempt'] = 'The attempt';
 $string['theattempt_help'] = 'Whether the student can review the attempt at all.';
 $string['time'] = 'Time';
 $string['timecompleted'] = 'Completed';
+$string['timeclose'] = 'Time close';
 $string['timedelay'] = 'You are not allowed to do the quiz since you have not passed the time delay before attempting another quiz';
 $string['timeleft'] = 'Time left';
 $string['timelimit'] = 'Time limit';

@@ -129,6 +129,35 @@ require_once($CFG->dirroot . '/course/lib.php');
           ->add_field("{$quizalias}.timeopen")
           ->add_callback([format::class, 'userdate']);
 
+       // Quiz time close column.
+       $columns[] = (new column(
+           'timeclose',
+           new lang_string('timeclose', 'mod_quiz'),
+           $this->get_entity_name()
+       ))
+           ->set_type(column::TYPE_TIMESTAMP)
+           ->set_is_sortable(true)
+           ->add_field("{$quizalias}.timeclose")
+           ->add_callback([format::class, 'userdate']);
+
+       // Quiz time limit column.
+       $columns[] = (new column(
+           'timelimit',
+           new lang_string('timelimit', 'mod_quiz'),
+           $this->get_entity_name()
+       ))
+           ->set_is_sortable(true)
+           ->add_field("{$quizalias}.timelimit");
+
+       // Quiz grade column.
+       $columns[] = (new column(
+           'grade',
+           new lang_string('gradenoun'),
+           $this->get_entity_name()
+       ))
+           ->set_is_sortable(true)
+           ->add_field("{$quizalias}.grade");
+
        //Handle quiz attempts columns.
 
        //Attempts column.

@@ -51,5 +51,49 @@ use core_reportbuilder\local\helpers\database;
 
          $quizentity = new \mod_quiz\local\entities\quiz();
          $quizalias = $quizentity->get_table_alias('quiz');
+         $this->set_main_table('quiz', $quizalias);
+         $this->add_entity($quizentity);
+
+         // Join the quiz entity.
+         $coursentity = new course();
+         $coursealias = $coursentity->get_table_alias('course');
+         $coursejoin = "JOIN {course} {$coursealias} ON {$coursealias}.id = {$quizalias}.course";
+         $this->add_entity($coursentity->add_join($coursejoin));
+
+         $this->add_all_from_entities();
      }
+
+    /**
+     * Return the columns that will added to the report once is created
+     *
+     * @return string[]
+     */
+    public function get_default_columns(): array {
+        
+        return ['course:fullname',
+                'quiz:name',
+                'quiz:timeopen', ];
+    }
+
+    /**
+     * Return the filters that will be added to the report once is created
+     *
+     * @return string[]
+     *
+     */
+    public function get_default_filters(): array {
+
+        return [];
+    }
+
+    /**
+     * Return the conditions that will be added to the report once is created
+     *
+     * @return string[]
+     *
+     */
+    public function get_default_conditions(): array {
+
+        return [];
+    }
  }

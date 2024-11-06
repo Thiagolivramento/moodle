@@ -50,9 +50,7 @@ require_once($CFG->dirroot . '/course/lib.php');
       * @return string[]
       */
      protected function get_default_tables(): array {
-         return [
-         //Ver os campos que serão disponibilizados.
-         ];
+         return ['quiz'];
      }
      
      /**
@@ -75,7 +73,7 @@ require_once($CFG->dirroot . '/course/lib.php');
 
         $columns = $this->get_all_columns();
         foreach ($columns as $column) {
-            $this->add_columns($column);
+            $this->add_column($column);
         }
     
         $filters = $this->get_all_filters();
@@ -104,10 +102,10 @@ require_once($CFG->dirroot . '/course/lib.php');
        $columns = [];
 
        $quizalias = $this->get_table_alias('quiz');
-       $quizattemptsalias = $this->get_table_alias('quiz_attempts'); 
+       //$quizattemptsalias = $this->get_table_alias('quiz_attempts'); 
 
-       $join = $this->quizjoin();
-       $quizattemptsjoin = $this->quizattempsjoin();
+       // $join = $this->quizjoin();
+       //$quizattemptsjoin = $this->quizattempsjoin();
 
        //Quiz name column.
        $columns[] = (new column(
@@ -115,7 +113,7 @@ require_once($CFG->dirroot . '/course/lib.php');
            new lang_string('name', 'mod_quiz'),
            $this->get_entity_name()
        ))
-           ->add_join($join)
+          // ->add_join($join)
            ->set_is_sortable(true)
            ->add_field("{$quizalias}.name");
 
@@ -125,21 +123,23 @@ require_once($CFG->dirroot . '/course/lib.php');
            new lang_string('timeopen', 'mod_quiz'),
            $this->get_entity_name()
        ))
-          ->add_join($join)
-          ->set_sortable(true)
-          ->add_field("{$quizalias}.timeopen");
+          //->add_join($join)
+          ->set_type(column::TYPE_TIMESTAMP)
+          ->set_is_sortable(true)
+          ->add_field("{$quizalias}.timeopen")
+          ->add_callback([format::class, 'userdate']);
 
        //Handle quiz attempts columns.
 
        //Attempts column.
-       $columns[] = (new column(
-           'state',
-           new lang_string('state', 'mod_quiz'),
-           $this->get_entity_name()
-       ))
-           ->add_join($quizattemptsjoin)
-           ->set_sortable(true)
-           ->add_field("{$quizattemptsalias}.state");
+       //$columns[] = (new column(
+       //    'state',
+       //    new lang_string('state', 'mod_quiz'),
+       //    $this->get_entity_name()
+       //))
+       //    ->add_join($quizattemptsjoin)
+       //    ->set_sortable(true)
+       //    ->add_field("{$quizattemptsalias}.state");
 
       return $columns;
     }
@@ -153,10 +153,10 @@ require_once($CFG->dirroot . '/course/lib.php');
 
        $filters = [];
        $quizalias = $this->get_table_alias('quiz');
-       $quizattemptsalias = $this->get_table_alias('quiz_attempts'); 
+      // $quizattemptsalias = $this->get_table_alias('quiz_attempts'); 
 
-       $join = $this->quizjoin();
-       $quizattemptsjoin = $this->quizattempsjoin();
+      // $join = $this->quizjoin();
+      // $quizattemptsjoin = $this->quizattempsjoin();
 
        //Quiz name filter.
        $filters[] = (new filter(
@@ -165,8 +165,8 @@ require_once($CFG->dirroot . '/course/lib.php');
            new lang_string('name', 'mod_quiz'),
            $this->get_entity_name(),
            "{$quizalias}.name"
-       ))
-           ->add_join($join);
+       ));
+          // ->add_join($join);
 
       return $filters;
     }

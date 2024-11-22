@@ -56,6 +56,16 @@ require_once($CFG->dirroot . '/course/lib.php');
      }
 
      /**
+      * the defaul title for this entity
+      *
+      * @return lang_string
+      */
+
+     protected function get_default_entity_title(): lang_string {
+         return new lang_string('quizgradesinstancies', 'mod_quiz');
+     }
+
+     /**
       * Initialise the entity, add all quiz grades fields
       *
       * @return base
@@ -126,7 +136,7 @@ require_once($CFG->dirroot . '/course/lib.php');
       *
       * @return filter[]
       */
-     protected function getl_all_filters(): array {
+     protected function get_all_filters(): array {
 
          $filters = [];
          $quizgradealias = $this->get_table_alias('quiz_grades');

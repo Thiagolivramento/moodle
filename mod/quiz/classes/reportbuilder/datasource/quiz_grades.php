@@ -58,17 +58,20 @@ class quiz_grades extends datasource {
         $quizalias = $quizentity->get_table_alias('quiz');
         //$this->set_main_table('quiz', $quizalias);
         $quizjoin = "JOIN {quiz} {$quizalias} ON {$quizalias}.id = {$quizgradesalias}.quiz";
-        $this->add_entity($quizentity->add_join($quizjoin));
+        $this->add_entity($quizentity);
+        $this->add_join($quizjoin);
 
         $courseentity = new course();
         $coursealias = $courseentity->get_table_alias('course');
         $coursejoin = "JOIN {course} {$coursealias} ON {$coursealias}.id = {$quizalias}.course";
-        $this->add_entity($courseentity->add_join($coursejoin));
+        $this->add_entity($courseentity);
+        $this->add_join($coursejoin);
 
         $userentity = new user();
         $useralias = $userentity->get_table_alias('user');
         $userjoin = "JOIN {user} {$useralias} ON {$useralias}.id = {$quizgradesalias}.userid";
-        $this->add_entity($userentity->add_join($userjoin));
+        $this->add_entity($userentity);
+        $this->add_join($userjoin);
 
         $this->add_all_from_entities();
     }

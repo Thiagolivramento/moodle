@@ -42,7 +42,7 @@ use core_reportbuilder\local\helpers\database;
       */
      
      public static function get_name(): string {
-         return get_string('quizreport', 'mod_quiz');
+         return get_string('pluginname', 'mod_quiz');
      }
 
      protected function initialise(): void {

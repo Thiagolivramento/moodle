@@ -51,8 +51,7 @@ require_once($CFG->dirroot . '/course/lib.php');
       */
 
      protected function get_default_tables(): array {
-         return ['quiz_grades',
-                 'course_modules'];
+         return ['quiz_grades'];
      }
 
      /**
